@@ -1,0 +1,25 @@
+{
+  "name": "neuralstocks",
+  "version": "1.0.0",
+  "description": "Neural stocks for learning ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivonederlof/NeuralStocks.git"
+  },
+  "author": "Ivo Nederlof",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivonederlof/NeuralStocks/issues"
+  },
+  "homepage": "https://github.com/ivonederlof/NeuralStocks#readme",
+  "dependencies": {
+    "electron": "^1.6.11",
+    "express": "^4.15.3",
+    "save": "^2.3.1",
+    "synaptic": "^1.0.12"
+  }
+}
