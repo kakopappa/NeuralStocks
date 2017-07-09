@@ -19,6 +19,7 @@
   "dependencies": {
     "electron": "^1.6.11",
     "express": "^4.15.3",
+    "google-finance": "^0.1.9",
     "save": "^2.3.1",
     "synaptic": "^1.0.12"
   }
