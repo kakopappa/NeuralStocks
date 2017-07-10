@@ -4,7 +4,8 @@
   "description": "Neural stocks for learning ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,9 @@
     "electron": "^1.6.11",
     "express": "^4.15.3",
     "google-finance": "^0.1.9",
+    "mongoose": "^4.11.1",
+    "node-cmd": "^3.0.0",
+    "requirejs": "^2.3.3",
     "save": "^2.3.1",
     "synaptic": "^1.0.12"
   }

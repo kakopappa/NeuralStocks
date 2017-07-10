@@ -1,6 +1,6 @@
 
-const data = require('./_data/data')
-
-data.historical(function(quotes) {
-    console.log(quotes)
-})
+const data = require('./_data/data'),
+      server = require('./_server/server')
+      // start the main server
+      server.start()
+ 

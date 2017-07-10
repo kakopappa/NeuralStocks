@@ -1,0 +1,17 @@
+{
+    "ma": {
+        "period": {
+            "extra_small": 10,
+            "small": 30,
+            "medium":60,
+            "big":120
+        }
+    },
+    "rsi": {
+        "period": 14
+    },
+    "stochastic": {
+        "period": 14,
+        "signalperiod":3
+    }
+}
