@@ -1,8 +1,11 @@
 
 const fs = require('fs')
 const googleFinance = require('google-finance'),
-      config = require('../_server/static/config/symbol_config')
+      config = require('../_server/static/config/symbol_config'),
+      normal = require('../_neural/normalize')
+const staticDataDir = '/../_server/static/data'
 
+/** HISTORICAL DATA */
 function historical(symbol, callback) {
     googleFinance.historical({
     symbol:symbol,
@@ -12,37 +15,70 @@ function historical(symbol, callback) {
         if(err) {
             callback(err)
         } else {
+
             historicalQuotes = quotes
             callback(historicalQuotes)
         }
     })  
 }
 
+/** SAVE ALL HISTORICAL/PROCESSED DATA TO FOLDER */
+exports.saveAllData = function(index,callback) {
 
-exports.saveAllHistorical = function(index) {
-
-    let symbol = config.symbols.nasdaq
-    var temp = []
-
-    for(i in symbol) {
-        var sym = symbol[i]
-        saveTheFile(index + ':'+symbol[i], function() {
-            
+    let symbols = config.symbols[index]
+    for(i in symbols) {
+        saveQuotesToFile(index + ':'+ symbols[i], function(result, symbol) {
+            saveProcessedToFile(index + ':'+ symbol, result, function() {
+                console.log('Saved all normalized data ...')
+            })
         })
     }
 }
 
-function saveTheFile(symbol,callback) {
+/** SAVE SYMBOL */
+function saveQuotesToFile(symbol, callback) {
     historical(symbol, function(result) {
-        console.log('saving symbol ' +symbol)
+        var jsonString = JSON.stringify(result)
+            fs.writeFile(__dirname + staticDataDir + "/historical/" + symbol + '.json', jsonString, function(err) {
+                if(err) { return console.log(err) }
+            })
+        console.log('saved '+ symbol + '\n\n')
+        callback(result, symbol)
+    })
+}
 
-        fs.writeFile(__dirname + "/../_server/static/data/historical/" + symbol + '.json', result, function(err) {
+
+/** SAVE PROCESSED QOUTE */
+function saveProcessedToFile(symbol, data, callback) {
+    var processedArray = []
+    var closeArray = [],
+        openArray = [],
+        highArray = [],
+        lowArray = [],
+        volumeArray = []
+    var close,open,high,low,volume
+ 
+    // store them for min max value finder
+        for(i in data) {
+            closeArray.push(data[i].close)
+            openArray.push(data[i].open)
+            highArray.push(data[i].high)
+            lowArray.push(data[i].low)
+            volumeArray.push(data[i].volume)
+        }
+        // get the value from minmax
+        normal.getMinMaxValues(closeArray, function(result) { close = result })
+        normal.getMinMaxValues(openArray, function(result) { open = result })
+        normal.getMinMaxValues(highArray, function(result) { high = result })
+        normal.getMinMaxValues(lowArray, function(result) { low = result })
+        normal.getMinMaxValues(volumeArray, function(result) { volume = result })
+        // store them for file
+        for(i in data) {
+            processedArray.push([close[i], open[i], high[i], low[i], volume[i]])
+        }
+        var jsonString = JSON.stringify(processedArray)
+        fs.writeFile(__dirname + staticDataDir + "/processed/" + symbol + '.json', jsonString, function(err) {
             if(err) { return console.log(err) }
-
-            console.log("File created!");
-        })
-        console.log(result)
-        console.log('saved ... \n\n')
         callback()
     })
 }
