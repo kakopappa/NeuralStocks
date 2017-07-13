@@ -24,12 +24,11 @@ function historical(symbol, callback) {
 
 /** SAVE ALL HISTORICAL/PROCESSED DATA TO FOLDER */
 exports.saveAllData = function(index,callback) {
-
     let symbols = config.symbols[index]
     for(i in symbols) {
         saveQuotesToFile(index + ':'+ symbols[i], function(result, symbol) {
-            saveProcessedToFile(index + ':'+ symbol, result, function() {
-                console.log('Saved all normalized data ...')
+            saveProcessedToFile(symbol, result, function() {
+                 callback()
             })
         })
     }
@@ -42,7 +41,7 @@ function saveQuotesToFile(symbol, callback) {
             fs.writeFile(__dirname + staticDataDir + "/historical/" + symbol + '.json', jsonString, function(err) {
                 if(err) { return console.log(err) }
             })
-        console.log('saved '+ symbol + '\n\n')
+        console.log('saved '+ symbol)
         callback(result, symbol)
     })
 }
@@ -56,7 +55,9 @@ function saveProcessedToFile(symbol, data, callback) {
         highArray = [],
         lowArray = [],
         volumeArray = []
-    var close,open,high,low,volume
+        signal = Number 
+
+    var close, open, high, low, volume, signal
  
     // store them for min max value finder
         for(i in data) {
@@ -72,9 +73,10 @@ function saveProcessedToFile(symbol, data, callback) {
         normal.getMinMaxValues(highArray, function(result) { high = result })
         normal.getMinMaxValues(lowArray, function(result) { low = result })
         normal.getMinMaxValues(volumeArray, function(result) { volume = result })
+        normal.getSignalBinary(open, close , function(result) { signal = result }) 
         // store them for file
         for(i in data) {
-            processedArray.push([close[i], open[i], high[i], low[i], volume[i]])
+            processedArray.push([close[i], open[i], high[i], low[i], volume[i], signal[i]])
         }
         var jsonString = JSON.stringify(processedArray)
         fs.writeFile(__dirname + staticDataDir + "/processed/" + symbol + '.json', jsonString, function(err) {
