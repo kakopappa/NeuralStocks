@@ -5,6 +5,20 @@ const googleFinance = require('google-finance'),
       normal = require('../_neural/normalize')
 const staticDataDir = '/../_server/static/data'
 
+
+/** SAVE ALL HISTORICAL/PROCESSED DATA TO FOLDER */
+exports.saveAllData = function(index,callback) {
+    let symbols = config.symbols[index]
+    for(i in symbols) {
+        saveQuotesToFile(index + ':'+ symbols[i], function(result, symbol) {
+            saveProcessedToFile(symbol, result, function() {
+                 callback()
+            })
+        })
+    }
+}
+
+
 /** HISTORICAL DATA */
 function historical(symbol, callback) {
     googleFinance.historical({
@@ -20,18 +34,6 @@ function historical(symbol, callback) {
             callback(historicalQuotes)
         }
     })  
-}
-
-/** SAVE ALL HISTORICAL/PROCESSED DATA TO FOLDER */
-exports.saveAllData = function(index,callback) {
-    let symbols = config.symbols[index]
-    for(i in symbols) {
-        saveQuotesToFile(index + ':'+ symbols[i], function(result, symbol) {
-            saveProcessedToFile(symbol, result, function() {
-                 callback()
-            })
-        })
-    }
 }
 
 /** SAVE SYMBOL */

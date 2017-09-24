@@ -44,9 +44,11 @@ exports.execute = function(symbol, callback) {
 
 
 function trainTheNetwork(callback) {
-    trainer.train(trainingSet, trainingOptions, function(result) {
-        console.log(result)
-    })  
+
+    let last = trainingSet[trainingSet.length-1]
+        trainer.train(trainingSet, trainingOptions, function(result) {
+            console.log(result)
+        })  
     callback()
 }
 
@@ -70,9 +72,7 @@ function predict(set,callback) {
 //** DATA SELECTION*/
 
 function getSelectedDataFromFile(symbol, callback) {
-
     var selectedData = []
-
     fs.readFile(__dirname + '/../_server/static/data/processed/' + symbol + '.json','utf8',function(err, data) {
         if(err) 
             callback(err)

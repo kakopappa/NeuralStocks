@@ -9,9 +9,15 @@ function setMinMax(array, callback) {
     callback(min, max)
 }
 
+
+/** MAIN EQUATION */
+
 function minMax(value,min,max) {
     return (value - min)/(max-min)
 }
+
+
+/** MAIN MIN MAX GETTER */
 
 exports.getMinMaxValues = function(array, callback) {
         var newValues = [] 
@@ -24,6 +30,8 @@ exports.getMinMaxValues = function(array, callback) {
     callback(newValues)
 }
 
+
+/** GETS THE DIRECTION OF A SIGNAL */
 exports.getSignalBinary = function(open, close, callback) {
     var binary = 0 
     var signal = []

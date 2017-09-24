@@ -25,6 +25,7 @@ function getJSONData(callback) {
     {type: 'number', label: 'Close'},
     {type: 'number', label: 'Open'}
     ])
+  
     $.getJSON("../data/historical/NASDAQ:AAPL.json", function(data) {
       for(i in data) {
           var date = new Date(data[i].date)
